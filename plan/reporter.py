@@ -9,7 +9,7 @@ from plan.schedule import Schedule
 from plan.time_range import TimeRange
 
 
-__lock = threading.Lock()
+_lock = threading.Lock()
 
 
 class Reporter(metaclass=Singleton):
@@ -58,14 +58,14 @@ class Reporter(metaclass=Singleton):
 
             # If there are any old times, remove them from the schedule and send the report.
             if remove_times:
-                with __lock:
+                with _lock:
                     for old_time in remove_times:
                         scheduled_report.schedule.remove_time(old_time)
                 scheduled_report.report.send()
 
             # If there are no more scheduled times for the report, delete it.
             if not scheduled_report.schedule.times:
-                with __lock:
+                with _lock:
                     self.scheduled_reports.remove(scheduled_report)
 
     @property
