@@ -1,3 +1,4 @@
+__package__ = 'pyplan'
 __author__ = 'CodePeasants'
 __email__ = 'codepeasants@gmail.com'
 __version__ = '0.1.0'

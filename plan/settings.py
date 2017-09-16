@@ -1,7 +1,7 @@
 import appdirs
+import plan
 
 
-APP_NAME = 'pyplan'
-APP_AUTHOR = 'CodePeasants'
-DATA_PATH = appdirs(APP_NAME, APP_AUTHOR)
-TICK_RATE = 60
+DATA_PATH = appdirs.user_data_dir(plan.__package__, plan.__author__)
+LOG_PATH = appdirs.user_log_dir(plan.__package__, plan.__author__)
+TICK_RATE = 60  # Default tick rate for Reporter in seconds.
