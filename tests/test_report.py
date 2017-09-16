@@ -16,8 +16,7 @@ class TestReport(unittest.TestCase):
 
     def test_print_report(self):
         report = PrintReport(self.event, title='title', message='message')
-        expected_result = ('to: foo\n'
-                           'title: title\n'
+        expected_result = ('title: title\n'
                            'message:\n'
                            'message')
         self.assertEqual(expected_result, report.formatted())

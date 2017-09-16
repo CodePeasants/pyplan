@@ -1,8 +1,9 @@
-# Python
+# Python standard library
 import threading
 
 # Package
-from lib import Singleton
+from plan.logger import log
+from plan.lib import Singleton
 from plan.ticker import Ticker
 from plan.schedule import Schedule
 from plan.time_range import TimeRange
@@ -13,8 +14,8 @@ __lock = threading.Lock()
 
 class Reporter(metaclass=Singleton):
 
-    def __init__(self, reports=None):
-        self.__reports = reports or []
+    def __init__(self, scheduled_reports=None):
+        self.__scheduled_reports = scheduled_reports or []
         self.__ticker = Ticker()
         self.__ticker.add_callback(self._tick)
 
@@ -32,7 +33,7 @@ class Reporter(metaclass=Singleton):
 
     def reset(self):
         self.stop()
-        self.__reports = []
+        self.__scheduled_reports = []
         self.__ticker = Ticker()
         self.__ticker.add_callback(self._tick)
         self.start()
@@ -69,17 +70,20 @@ class Reporter(metaclass=Singleton):
 
     @property
     def scheduled_reports(self):
-        return self.__reports
+        return self.__scheduled_reports
 
     def add_report(self, report, schedule=None):
-        if not isinstance(report, ScheduledReport):
-            report = ScheduledReport(report, schedule)
-        if report not in self.reports:
-            self.reports.append(report)
+        report = ScheduledReport(report, schedule)
+        if report not in self.scheduled_reports:
+            self.scheduled_reports.append(report)
+        else:
+            log.debug('{} already included. Nothing to do.'.format(report))
 
     def remove_report(self, report):
-        if report in self.reports:
-            self.reports.remove(report)
+        if report in self.scheduled_reports:
+            self.scheduled_reports.remove(report)
+        else:
+            log.debug('{} not found. Nothing to do.'.format(report))
 
 
 class ScheduledReport:

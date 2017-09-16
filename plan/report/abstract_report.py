@@ -26,6 +26,7 @@ class AbstractReport(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_targets(self):
+        """Get explicit output stream(s) for the send method."""
         pass
 
     @abc.abstractmethod

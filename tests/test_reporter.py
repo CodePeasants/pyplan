@@ -24,14 +24,14 @@ class TestReporter(unittest.TestCase):
     def test_tick(self):
         report = PrintReport(self.event, 'title', 'message')
         self.reporter.add_report(report)
-        self.assertEqual(1, len(self.reporter.reports))
+        self.assertEqual(1, len(self.reporter.scheduled_reports))
 
         self.reporter.tick_rate = 0.1
         self.reporter.start()
         time.sleep(0.2)
         self.reporter.stop()
 
-        self.assertFalse(self.reporter.reports)
+        self.assertFalse(self.reporter.scheduled_reports)
 
     # def test_tick_multiple(self):
     #     # todo add multiple times to the schedule. Verify that the report gets emitted at the appropriate times

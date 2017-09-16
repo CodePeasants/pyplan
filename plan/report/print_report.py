@@ -1,21 +1,17 @@
+# Package
 from plan.report.abstract_report import AbstractReport
-from plan.settings import EVERYONE
 
 
 class PrintReport(AbstractReport):
 
     def formatted(self):
-        return ('to: {1}\n'
-                'title: {0.title}\n'
+        return ('title: {0.title}\n'
                 'message:\n'
-                '{0.message}').format(self, self.get_targets())
+                '{0.message}').format(self)
 
     def get_targets(self):
-        members = self.get_members()
-        targets = [x.user.name for x in members if hasattr(x, 'user')]
-        if EVERYONE in members:
-            targets.insert(0, EVERYONE)
-        return targets
+        """This report has no targets. It will use the python built-in print method to send."""
+        pass
 
     def send(self):
         print(self.formatted())
