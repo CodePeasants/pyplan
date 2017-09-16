@@ -20,7 +20,7 @@ class Event:
         """
         :param str name:
             Name of the event.
-        :param ChristmasMiracleUser owner:
+        :param AbstractUser owner:
             User that owns the event.
         :param Status status:
             Initial status of the event.

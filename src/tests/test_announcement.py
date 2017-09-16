@@ -2,7 +2,7 @@
 import unittest
 
 # Package
-from bot.christmas_miracle_user import ChristmasMiracleUser
+from plan.user import User
 from plan.event import Event
 from plan.announcement.print_announcement import PrintAnnouncement
 
@@ -11,7 +11,7 @@ class TestAnnouncement(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.owner = ChristmasMiracleUser('foo')
+        self.owner = User('foo')
         self.event = Event('foo', self.owner)
 
     def test_print_announcement(self):

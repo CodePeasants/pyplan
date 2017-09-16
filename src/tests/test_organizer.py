@@ -1,7 +1,7 @@
 import os
 from functools import partial
 import unittest
-from bot.christmas_miracle_user import ChristmasMiracleUser
+from plan.user import User
 from plan.event import Event
 from plan.organizer import Organizer
 from plan.schedule import Schedule
@@ -13,9 +13,9 @@ class TestOrganizer(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestOrganizer, self).__init__(*args, **kwargs)
-        self.owner = ChristmasMiracleUser('foo')
-        self.invited_user = ChristmasMiracleUser('bar')
-        self.uninvited_user = ChristmasMiracleUser('foobar')
+        self.owner = User('foo')
+        self.invited_user = User('bar')
+        self.uninvited_user = User('foobar')
 
         self.event = Event('a', self.owner)
         self.invited_member = self.event.registrar.register(self.invited_user)

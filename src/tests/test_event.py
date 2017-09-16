@@ -1,6 +1,5 @@
-import os
 import unittest
-from bot.christmas_miracle_user import ChristmasMiracleUser
+from plan.user import User
 from plan.event import Event
 
 
@@ -8,7 +7,7 @@ class TestEvent(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = ChristmasMiracleUser('foo')
+        self.user = User('foo')
 
     def test_init_hierarchy(self):
         event_a = Event('a', self.user)

@@ -3,7 +3,7 @@ import time
 import unittest
 
 # Package
-from bot.christmas_miracle_user import ChristmasMiracleUser
+from plan.user import User
 from plan.reporter import Reporter
 from plan.event import Event
 from plan.announcement.print_announcement import PrintAnnouncement
@@ -13,7 +13,7 @@ class TestReporter(unittest.TestCase):
 
     def __init__(self):
         super().__init__()
-        self.owner = ChristmasMiracleUser('foo')
+        self.owner = User('foo')
         self.event = Event('foo', self.owner)
         self.reporter = Reporter()
 

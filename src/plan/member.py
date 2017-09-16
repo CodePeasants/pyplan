@@ -27,4 +27,4 @@ class Member:
 
     @property
     def name(self):
-        return self.user.discord_name
+        return self.user.name

@@ -1,5 +1,5 @@
 import unittest
-from bot.christmas_miracle_user import ChristmasMiracleUser
+from plan.user import User
 from plan.member import Status
 from plan.registrar import Registrar
 
@@ -8,7 +8,7 @@ class TestRegistrar(unittest.TestCase):
 
     def setUp(self):
         super(TestRegistrar, self).setUp()
-        self.user = ChristmasMiracleUser('foo')
+        self.user = User('foo')
 
     def test_register(self):
         reg = Registrar()

@@ -1,5 +1,5 @@
 import unittest
-from bot.christmas_miracle_user import ChristmasMiracleUser
+from plan.user import User
 from plan.manager import Manager
 from plan.event import Event
 
@@ -8,7 +8,7 @@ class TestManager(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestManager, self).__init__(*args, **kwargs)
-        self.user = ChristmasMiracleUser('foo')
+        self.user = User('foo')
 
     def tearDown(self):
         super().tearDown()

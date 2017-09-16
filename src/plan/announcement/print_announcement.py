@@ -12,7 +12,7 @@ class PrintAnnouncement(Announcement):
 
     def get_targets(self):
         members = self.get_members()
-        targets = [x.user.discord_name for x in members if hasattr(x, 'user')]
+        targets = [x.user.name for x in members if hasattr(x, 'user')]
         if EVERYONE in members:
             targets.insert(0, EVERYONE)
         return targets
