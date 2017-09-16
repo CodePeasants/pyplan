@@ -1,6 +1,6 @@
 import time
 import threading
-from event.settings import TICK_RATE
+from plan.settings import TICK_RATE
 
 
 class Ticker(threading.Thread):

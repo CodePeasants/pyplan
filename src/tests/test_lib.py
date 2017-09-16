@@ -1,6 +1,6 @@
 from functools import partial
 import unittest
-from event import lib
+from plan import lib
 
 
 class TestLib(unittest.TestCase):

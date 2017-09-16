@@ -3,9 +3,9 @@ import threading
 
 # Package
 from lib import Singleton
-from event.ticker import Ticker
-from event.schedule import Schedule
-from event.time_range import TimeRange
+from plan.ticker import Ticker
+from plan.schedule import Schedule
+from plan.time_range import TimeRange
 
 
 __lock = threading.Lock()

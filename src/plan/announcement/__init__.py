@@ -1,1 +1,1 @@
-from event.announcement.announcement import Announcement
+from plan.announcement.announcement import Announcement

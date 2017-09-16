@@ -1,6 +1,6 @@
 from lib import Singleton
-from event.event import Event
-from event.reporter import Reporter
+from plan.event import Event
+from plan.reporter import Reporter
 
 
 class Manager(metaclass=Singleton):

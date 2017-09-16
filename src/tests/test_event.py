@@ -1,7 +1,7 @@
 import os
 import unittest
 from bot.christmas_miracle_user import ChristmasMiracleUser
-from event.event import Event
+from plan.event import Event
 
 
 class TestEvent(unittest.TestCase):

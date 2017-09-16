@@ -1,5 +1,5 @@
 import unittest
-from event.requirement import Requirement
+from plan.requirement import Requirement
 
 
 class TestRequirement(unittest.TestCase):

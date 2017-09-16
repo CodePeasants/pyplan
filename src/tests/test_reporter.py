@@ -4,9 +4,9 @@ import unittest
 
 # Package
 from bot.christmas_miracle_user import ChristmasMiracleUser
-from event.reporter import Reporter
-from event.event import Event
-from event.announcement.print_announcement import PrintAnnouncement
+from plan.reporter import Reporter
+from plan.event import Event
+from plan.announcement.print_announcement import PrintAnnouncement
 
 
 class TestReporter(unittest.TestCase):

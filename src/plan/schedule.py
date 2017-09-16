@@ -1,7 +1,7 @@
 from datetime import datetime
 from pytz import timezone
-from event.time_range import TimeRange
-from event.lib import get_time_zone
+from plan.time_range import TimeRange
+from plan.lib import get_time_zone
 from logger import log
 
 

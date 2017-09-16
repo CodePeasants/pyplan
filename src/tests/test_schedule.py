@@ -1,5 +1,5 @@
 import unittest
-from event.schedule import Schedule
+from plan.schedule import Schedule
 
 
 class TestSchedule(unittest.TestCase):

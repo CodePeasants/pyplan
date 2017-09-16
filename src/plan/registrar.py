@@ -1,6 +1,6 @@
-from event.member import Status
-from event.member import Member
-from event.requirement import Requirement
+from plan.member import Status
+from plan.member import Member
+from plan.requirement import Requirement
 
 
 class Registrar:

@@ -1,4 +1,4 @@
-from event.member import Status
+from plan.member import Status
 from logger import log
 
 

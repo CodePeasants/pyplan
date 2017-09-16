@@ -1,7 +1,7 @@
 import unittest
 from bot.christmas_miracle_user import ChristmasMiracleUser
-from event.member import Status
-from event.registrar import Registrar
+from plan.member import Status
+from plan.registrar import Registrar
 
 
 class TestRegistrar(unittest.TestCase):

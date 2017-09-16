@@ -1,7 +1,7 @@
 import unittest
 from bot.christmas_miracle_user import ChristmasMiracleUser
-from event.manager import Manager
-from event.event import Event
+from plan.manager import Manager
+from plan.event import Event
 
 
 class TestManager(unittest.TestCase):

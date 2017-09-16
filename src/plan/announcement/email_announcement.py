@@ -1,4 +1,4 @@
-from event.announcement import Announcement
+from plan.announcement import Announcement
 
 
 class EmailMessage(Announcement):

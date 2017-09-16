@@ -1,8 +1,8 @@
 from enum import Enum
 from enum import auto
-from event.organizer import Organizer
-from event.registrar import Registrar
-from event.lib import get_time_zone
+from plan.organizer import Organizer
+from plan.registrar import Registrar
+from plan.lib import get_time_zone
 
 
 class Status(Enum):

@@ -4,8 +4,8 @@ import abc
 # Package
 from enum import Flag
 from enum import auto
-from event.member import Status
-from event.settings import EVERYONE
+from plan.member import Status
+from plan.settings import EVERYONE
 
 
 class AudienceType(Flag):

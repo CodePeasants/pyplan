@@ -1,5 +1,5 @@
-from event.announcement import Announcement
-from event.settings import EVERYONE
+from plan.announcement import Announcement
+from plan.settings import EVERYONE
 
 
 class PrintAnnouncement(Announcement):

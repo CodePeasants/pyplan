@@ -4,7 +4,7 @@ import time
 import unittest
 
 # Package
-from event.ticker import Ticker
+from plan.ticker import Ticker
 
 
 class TestTicker(unittest.TestCase):

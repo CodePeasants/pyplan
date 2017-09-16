@@ -2,11 +2,11 @@ import os
 from functools import partial
 import unittest
 from bot.christmas_miracle_user import ChristmasMiracleUser
-from event.event import Event
-from event.organizer import Organizer
-from event.schedule import Schedule
-from event.time_range import TimeRange
-from event.member import Status
+from plan.event import Event
+from plan.organizer import Organizer
+from plan.schedule import Schedule
+from plan.time_range import TimeRange
+from plan.member import Status
 
 
 class TestOrganizer(unittest.TestCase):

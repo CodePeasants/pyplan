@@ -1,5 +1,5 @@
 import unittest
-from event.time_range import TimeRange
+from plan.time_range import TimeRange
 
 
 class TestTimeRange(unittest.TestCase):
