@@ -1,7 +1,7 @@
-import os
-from settings import settings
+import appdirs
 
 
-EVENT_SAVE = os.path.join(settings.SAVE_ROOT, "event.json")
-EVERYONE = 'everyone'
+APP_NAME = 'pyplan'
+APP_AUTHOR = 'CodePeasants'
+DATA_PATH = appdirs(APP_NAME, APP_AUTHOR)
 TICK_RATE = 60

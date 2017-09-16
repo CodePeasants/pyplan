@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+[packages]
+
+fuzzywuzzy = "==0.15.0"
+pytz = "==2017.2"
+appdirs = "*"
+
+
+[dev-packages]
+pytest = "*"
+
+

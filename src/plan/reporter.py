@@ -13,8 +13,8 @@ __lock = threading.Lock()
 
 class Reporter(metaclass=Singleton):
 
-    def __init__(self, announcements=None):
-        self.__announcements = announcements or []
+    def __init__(self, reports=None):
+        self.__reports = reports or []
         self.__ticker = Ticker()
         self.__ticker.add_callback(self._tick)
 
@@ -32,7 +32,7 @@ class Reporter(metaclass=Singleton):
 
     def reset(self):
         self.stop()
-        self.__announcements = []
+        self.__reports = []
         self.__ticker = Ticker()
         self.__ticker.add_callback(self._tick)
         self.start()
@@ -42,48 +42,48 @@ class Reporter(metaclass=Singleton):
             self.__ticker.start()
 
     def stop(self):
-        if self.__ticker is not None and self.__ticket.is_alive():
+        if self.__ticker is not None and self.__ticker.is_alive():
             self.__ticker.stop()
 
     def _tick(self):
-        """Checks scheduled announcements against the current time & announces."""
+        """Checks scheduled reports against the current time & announces."""
         current_time = TimeRange.now()
-        for scheduled_announcement in self.scheduled_announcements[:]:
+        for scheduled_report in self.scheduled_reports[:]:
             # Collect all of the times from the schedule earlier than the current time.
             remove_times = []
-            for each_time in scheduled_announcement.schedule.times[:]:
+            for each_time in scheduled_report.schedule.times[:]:
                 if each_time <= current_time:
                     remove_times.append(each_time)
 
-            # If there are any old times, remove them from the schedule and send the announcement.
+            # If there are any old times, remove them from the schedule and send the report.
             if remove_times:
                 with __lock:
                     for old_time in remove_times:
-                        scheduled_announcement.schedule.remove_time(old_time)
-                scheduled_announcement.announcement.send()
+                        scheduled_report.schedule.remove_time(old_time)
+                scheduled_report.report.send()
 
-            # If there are no more scheduled times for the announcement, delete it.
-            if not scheduled_announcement.schedule.times:
+            # If there are no more scheduled times for the report, delete it.
+            if not scheduled_report.schedule.times:
                 with __lock:
-                    self.scheduled_announcements.remove(scheduled_announcement)
+                    self.scheduled_reports.remove(scheduled_report)
 
     @property
-    def scheduled_announcements(self):
-        return self.__announcements
+    def scheduled_reports(self):
+        return self.__reports
 
-    def add_announcement(self, announcement, schedule=None):
-        if not isinstance(announcement, ScheduledAnnouncement):
-            announcement = ScheduledAnnouncement(announcement, schedule)
-        if announcement not in self.announcements:
-            self.announcements.append(announcement)
+    def add_report(self, report, schedule=None):
+        if not isinstance(report, ScheduledReport):
+            report = ScheduledReport(report, schedule)
+        if report not in self.reports:
+            self.reports.append(report)
 
-    def remove_announcement(self, announcement):
-        if announcement in self.announcements:
-            self.announcements.remove(announcement)
+    def remove_report(self, report):
+        if report in self.reports:
+            self.reports.remove(report)
 
 
-class ScheduledAnnouncement:
+class ScheduledReport:
 
-    def __init__(self, announcement, schedule=None):
-        self.announcement = announcement
+    def __init__(self, report, schedule=None):
+        self.report = report
         self.schedule = schedule or Schedule.now()

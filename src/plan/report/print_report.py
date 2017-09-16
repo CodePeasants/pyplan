@@ -1,8 +1,8 @@
-from plan.announcement import Announcement
+from plan.report.abstract_report import AbstractReport
 from plan.settings import EVERYONE
 
 
-class PrintAnnouncement(Announcement):
+class PrintReport(AbstractReport):
 
     def formatted(self):
         return ('to: {1}\n'

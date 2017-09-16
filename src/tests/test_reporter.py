@@ -6,49 +6,49 @@ import unittest
 from plan.user import User
 from plan.reporter import Reporter
 from plan.event import Event
-from plan.announcement.print_announcement import PrintAnnouncement
+from plan.report.print_report import PrintReport
 
 
 class TestReporter(unittest.TestCase):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.owner = User('foo')
         self.event = Event('foo', self.owner)
         self.reporter = Reporter()
 
-    def setUp(self):
-        super().setUp()
+    def setUp(self, *args, **kwargs):
+        super().setUp(*args, **kwargs)
         self.reporter.reset()
 
     def test_tick(self):
-        announcement = PrintAnnouncement(self.event, 'title', 'message')
-        self.reporter.add_announcement(announcement)
-        self.assertEqual(1, len(self.reporter.announcements))
+        report = PrintReport(self.event, 'title', 'message')
+        self.reporter.add_report(report)
+        self.assertEqual(1, len(self.reporter.reports))
 
         self.reporter.tick_rate = 0.1
         self.reporter.start()
-        time.sleep(0.3)
+        time.sleep(0.2)
         self.reporter.stop()
 
-        self.assertFalse(self.reporter.announcements)
+        self.assertFalse(self.reporter.reports)
 
     # def test_tick_multiple(self):
-    #     # todo add multiple times to the schedule. Verify that the announcement gets emitted at the appropriate times
+    #     # todo add multiple times to the schedule. Verify that the report gets emitted at the appropriate times
     #     # and that it is removed only when the schedule completes.
-    #     announcement = PrintAnnouncement(self.event, 'title', 'message')
+    #     report = PrintReport(self.event, 'title', 'message')
     #     schedule = Schedule()
     #     schedule.add_time(TimeRange.relative())
     #
-    #     self.reporter.add_announcement(announcement)
-    #     self.assertEqual(1, len(self.reporter.announcements))
+    #     self.reporter.add_report(report)
+    #     self.assertEqual(1, len(self.reporter.reports))
     #
     #     self.reporter.tick_rate = 0.1
     #     self.reporter.start()
     #     time.sleep(0.3)
     #     self.reporter.stop()
     #
-    #     self.assertFalse(self.reporter.announcements)
+    #     self.assertFalse(self.reporter.reports)
 
 
 def main():
