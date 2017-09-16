@@ -10,6 +10,11 @@ class Status(Enum):
     SUBSCRIBED = auto()
     BANNED = auto()
 
+    # Macros for convenience.
+    ALL = INVITED | NOT_INVITED | PARTICIPATING | DECLINED | SUBSCRIBED | BANNED  # All statuses.
+    GENERAL = INVITED | NOT_INVITED | PARTICIPATING | SUBSCRIBED  # Excludes those explicitly not involved.
+    ACTIVE = INVITED | PARTICIPATING | SUBSCRIBED  # Those explicitly involved.
+
 
 class Member:
 
