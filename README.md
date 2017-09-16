@@ -1,4 +1,4 @@
-# pyplan 0.1.0
+# pyplan
 Python API for planning and running events.
 
 ## Features
@@ -9,7 +9,7 @@ Python API for planning and running events.
 * Allowing members to vote on potential schedules.
 * Message/announcements are extensible, you can create custom types of messages.
 
-## Getting Started
+[//]: # (## Getting Started)
 
 # Prerequisets
 * python 3+
@@ -30,7 +30,7 @@ Python API for planning and running events.
 [//]: # (python setup.py install)
 [//]: # (```)
 
-## Running the tests
+[//]: # (## Running the tests)
 
 ## Contributing
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
