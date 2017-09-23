@@ -28,7 +28,10 @@ class Serializable(metaclass=abc.ABCMeta):
 
     @abstract_classmethod
     def from_dict(cls, data):
-        pass
+        result = cls()
+        obj_id = data.pop(ID_KEY)
+        result.id = obj_id
+        return result
 
     @abc.abstractmethod
     def to_dict(self):
