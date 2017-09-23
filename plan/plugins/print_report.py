@@ -1,8 +1,9 @@
 # Package
-from plan.report.abstract_report import AbstractReport
+from plan.abstract_report import AbstractReport
+from plan.plugin_registry import RegisterMeta
 
 
-class PrintReport(AbstractReport):
+class PrintReport(AbstractReport, metaclass=RegisterMeta):
 
     def formatted(self):
         return ('title: {0.title}\n'
