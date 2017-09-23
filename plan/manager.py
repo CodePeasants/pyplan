@@ -1,30 +1,20 @@
-from lib import Singleton
-from plan.event import Event
+from plan.serializable import Serializable
 from plan.reporter import Reporter
+from plan.event import Event
 
 
-class Manager(metaclass=Singleton):
+class Manager(Serializable):
 
-    def __init__(self):
-        self.__events = set()
-        self.__is_dirty = True
-        self.__reporter = Reporter()
-        self.__reporter.start()
+    def __init__(self, events=None, reporter=None):
+        self.events = events or []
+        self.reporter = reporter or Reporter()
 
-    @property
-    def events(self):
-        return list(self.__events)
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            events=[Event.from_dict(x) for x in data.get('events', {})],
+            reporter=Reporter.from_dict(data.get('reporter', {}))
+        )
 
-    def add(self, event):
-        if not isinstance(event, Event):
-            raise TypeError('{0} of type: {1} must be Event!'.format(event, type(event)))
-        self.__events.add(event)
-
-    def remove(self, event):
-        if not isinstance(event, Event):
-            raise TypeError('{0} of type: {1} must be Event!'.format(event, type(event)))
-        if event in self.__events:
-            self.__events.remove(event)
-
-    def clear(self):
-        self.__events = set()
+    def to_dict(self):
+        return {'events': [x.to_dict() for x in self.events], 'reporter': self.reporter.to_dict()}

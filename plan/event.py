@@ -15,7 +15,7 @@ class Status(Enum):
 
 class Event:
 
-    def __init__(self, name, owner, status=Status.SCHEDULING, required_participants=None, registration_cutoff=None,
+    def __init__(self, name, owner=None, status=Status.SCHEDULING, required_participants=None, registration_cutoff=None,
                  time_zone=None, auto_confirm_schedule=True, parent=None):
         """
         :param str name:
