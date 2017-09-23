@@ -3,23 +3,36 @@ import abc
 
 # Package
 from plan.member import Status
+from plan.serializable import Serializable
 from plan.plugin_registry import PluginRegistry
+from plan.object_registry import ObjectRegistry
 
 
-class AbstractReport(metaclass=abc.ABCMeta):
+class AbstractReport(Serializable, metaclass=abc.ABCMeta):
 
-    def __init__(self, event, title='', message='', audience=Status.GENERAL):
+    def __init__(self, event=None, title='', message='', audience=Status.GENERAL):
+        super().__init__()
         self.event = event
         self.title = title
         self.message = message
         self.audience = audience
 
     def to_dict(self):
-        return {
-            'title': self.title,
-            'message': self.message,
-            'audience': self.audience
-        }
+        result = super().to_dict()
+        result['event'] = self.event.id
+        result['title'] = self.title
+        result['message'] = self.message
+        result['audience'] = self.audience.value
+        return result
+
+    @classmethod
+    def from_dict(cls, data):
+        result = super().from_dict(data)
+        result.event = ObjectRegistry.get(data.get('event'))
+        result.title = data.get('title')
+        result.message = data.get('message')
+        result.audience = data.get('audience')
+        return result
 
     def get_members(self):
         """Get the event members this report is targetting."""
