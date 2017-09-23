@@ -52,7 +52,7 @@ class Organizer:
                 'Schedule: {} is not among potential schedules: {}'.format(schedule, self.potential_schedules)
             )
 
-        if member not in self.__event.registrar.members:
+        if member not in self.__event.registry.members:
             raise PermissionError('{} is not a member of {}'.format(member, self.__event))
 
         if member.status not in [Status.INVITED, Status.PARTICIPATING]:

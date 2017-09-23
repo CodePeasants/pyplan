@@ -4,5 +4,5 @@ from plan.plugin_registry import RegisterMeta
 
 class EmailReport(AbstractReport, metaclass=RegisterMeta):
 
-    def formatted(self):
+    def format(self):
         pass  # todo

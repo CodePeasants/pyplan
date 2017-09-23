@@ -1,7 +1,7 @@
 from enum import Enum
 from enum import auto
 from plan.organizer import Organizer
-from plan.registrar import Registrar
+from plan.registry import Registry
 from plan.lib import get_time_zone
 
 
@@ -39,7 +39,7 @@ class Event:
         self.name = name
         self.owner = owner
         self.organizer = Organizer(self)
-        self.registrar = Registrar(required_participants)
+        self.registry = Registry(required_participants)
         self.registration_cutoff = registration_cutoff
         self.auto_confirm_schedule = auto_confirm_schedule
         self.status = status

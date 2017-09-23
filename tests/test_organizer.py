@@ -18,8 +18,8 @@ class TestOrganizer(unittest.TestCase):
         self.uninvited_user = User('foobar')
 
         self.event = Event('a', self.owner)
-        self.invited_member = self.event.registrar.register(self.invited_user)
-        self.uninvited_member = self.event.registrar.register(self.uninvited_user, Status.NOT_INVITED)
+        self.invited_member = self.event.registry.register(self.invited_user)
+        self.uninvited_member = self.event.registry.register(self.uninvited_user, Status.NOT_INVITED)
 
     def test_init(self):
         org = Organizer(self.event)

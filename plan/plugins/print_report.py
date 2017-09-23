@@ -5,7 +5,7 @@ from plan.plugin_registry import RegisterMeta
 
 class PrintReport(AbstractReport, metaclass=RegisterMeta):
 
-    def formatted(self):
+    def format(self):
         return ('title: {0.title}\n'
                 'message:\n'
                 '{0.message}').format(self)
@@ -15,4 +15,4 @@ class PrintReport(AbstractReport, metaclass=RegisterMeta):
         pass
 
     def send(self):
-        print(self.formatted())
+        print(self.format())

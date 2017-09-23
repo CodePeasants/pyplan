@@ -7,15 +7,18 @@ from plan.lib import Singleton
 from plan.ticker import Ticker
 from plan.schedule import Schedule
 from plan.time_range import TimeRange
+from plan.serializable import Serializable
 
 
 _lock = threading.Lock()
 
 
-class Reporter(metaclass=Singleton):
+class Reporter(Serializable):
 
-    def __init__(self, scheduled_reports=None):
+    def __init__(self, scheduled_reports=None, trigger_reports=None):
+        super().__init__()
         self.__scheduled_reports = scheduled_reports or []
+        self.__trigger_reports = trigger_reports or []
         self.__ticker = Ticker()
         self.__ticker.add_callback(self._tick)
 
@@ -72,6 +75,10 @@ class Reporter(metaclass=Singleton):
     def scheduled_reports(self):
         return self.__scheduled_reports
 
+    @property
+    def trigger_reports(self):
+        return self.__trigger_reports
+
     def add_report(self, report, schedule=None):
         report = ScheduledReport(report, schedule)
         if report not in self.scheduled_reports:
@@ -91,3 +98,19 @@ class ScheduledReport:
     def __init__(self, report, schedule=None):
         self.report = report
         self.schedule = schedule or Schedule.now()
+
+
+class TriggerReport:
+
+    def __init__(self, report, trigger):
+        """
+        Report to be sent when a certain event/trigger happens.
+
+        :param AbstractReport report:
+            The report to be sent.
+        :param func trigger:
+            Callable that returns a boolean. This will be evaluated on each reporter tick. When it evaluates to True,
+            the report will be sent.
+        """
+        self.report = report
+        self.trigger = trigger

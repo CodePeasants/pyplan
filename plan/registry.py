@@ -3,7 +3,7 @@ from plan.member import Member
 from plan.requirement import Requirement
 
 
-class Registrar:
+class Registry:
 
     def __init__(self, members=None, requirement=None):
         self.__members = []
@@ -58,7 +58,8 @@ class Registrar:
 
     def register(self, user, status=Status.INVITED):
         for member in self.members:
-            if user == member.user:
+            if user.name == member.name:
+                member.user.data.update(user.data)
                 member.status = status
                 return member
 

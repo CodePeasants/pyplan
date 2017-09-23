@@ -19,7 +19,7 @@ class TestReport(unittest.TestCase):
         expected_result = ('title: title\n'
                            'message:\n'
                            'message')
-        self.assertEqual(expected_result, report.formatted())
+        self.assertEqual(expected_result, report.format())
 
     def test_get_members(self):
         pass
