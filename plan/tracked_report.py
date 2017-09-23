@@ -19,7 +19,7 @@ class State(Enum):
 
 class TrackedReport(Serializable, metaclass=abc.ABCMeta):
 
-    def __init__(self, report, state=State.UNSENT):
+    def __init__(self, report=None, state=State.UNSENT):
         super().__init__()
         self.report = report
         self.state = state
@@ -28,10 +28,26 @@ class TrackedReport(Serializable, metaclass=abc.ABCMeta):
     def resolve_state(self):
         pass
 
+    def to_dict(self):
+        result = super().to_dict()
+        result['report'] = self.report.to_dict()
+        result['state'] = self.state.value
+        return result
+
+    def from_dict(cls, data):
+        result = super().from_dict(data)
+        result.state = State(data.get('state'))
+
+        report_dict = data.get('report')
+        report_cls = AbstractReport.get_type(report_dict)
+        report = report_cls.from_dict(report_dict)
+        result.report = report
+        return result
+
 
 class ScheduledReport(TrackedReport):
 
-    def __init__(self, report, state=State.UNSENT, schedule=None, last_send=None):
+    def __init__(self, report=None, state=State.UNSENT, schedule=None, last_send=None):
         super().__init__(report, state)
         self.report = report
         self.schedule = schedule or Schedule.now()
@@ -56,13 +72,28 @@ class ScheduledReport(TrackedReport):
 
         return self.state
 
+    def to_dict(self):
+        result = super().to_dict()
+        result['schedule'] = self.schedule.to_dict()
+        result['last_send'] = self.last_send
+        return result
+
 
 class TriggerReport(TrackedReport):
 
-    def __init__(self, report, state=State.UNSENT, trigger=None):
+    def __init__(self, report=None, state=State.UNSENT, trigger=None):
         """
         Report to be sent when a certain event/trigger happens. Must be careful about what kind of callable we pass in,
         so that it still works when we serailize/deserialize it.
+
+        Here is an example of how you can make a safe trigger. In this case, we want a report to be sent when a
+        particular event's status changes to SCHEDULED, meaning a scheduled time has been decided upon:
+
+        >>> from plan.object_registry import ObjectRegistry
+        >>> trigger = lambda : ObjectRegistry.get(event.id).status == Status.SCHEDULED
+
+        Because we use the object registry to get the event by it's ID, this trigger will survive
+        serialization & deserialization.
 
         :param AbstractReport report:
             The report to be sent.
@@ -81,12 +112,13 @@ class TriggerReport(TrackedReport):
             self.state = State.READY
         return self.state
 
+    def to_dict(self):
+        result = super().to_dict()
+        result['trigger'] = pickle.dumps(self.trigger)
+        return result
+
     @classmethod
     def from_dict(cls, data):
-        obj_id = data.pop(ID_KEY)
-        trigger = pickle.loads(data['trigger'])
-        report_dict = data.get('report')
-        report_cls = AbstractReport.get_type(report_dict)
-
-        result = cls(report_cls.from_dict(report_dict), trigger)
-        result.id = obj_id
+        result = super().from_dict(data)
+        result.trigger = pickle.loads(data.get('trigger'))
+        return result
