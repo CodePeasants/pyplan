@@ -1,13 +1,13 @@
 # pyplan
-Python API for planning and running events.
+Python framework for planning and managing human events. Good for events with any degree of complexity from
+get-togethers to sports/game tournaments.
 
 ## Features
-* Creating nested events.
 * Managing users and event members with status.
-* Sending & scheduling messages to members.
-* Creating and managing potential schedules for events.
-* Allowing members to vote on potential schedules.
-* Message/reports are extensible, you can create custom types of messages.
+* Sending messages to members via any communication channel (email, text message, discord message, etc...).
+* Supports nested events (e.g. a tournament could have child events for each match).
+* Creating and managing potential schedules for events (members can vote on the times that work for them).
+* Supports any kind of back-end for data persistence.
 
 [//]: # (## Getting Started)
 

@@ -11,7 +11,7 @@ class ObjectRegistry:
     def register(cls, obj):
         obj_id = obj.id
         if obj_id not in cls.OBJECTS:
-            cls.OBJECTS[obj_id] == weakref.proxy(obj, partial(cls._cleanup, obj_id))
+            cls.OBJECTS[obj_id] = weakref.proxy(obj, partial(cls._cleanup, obj_id))
 
     @classmethod
     def get(cls, obj_id):
