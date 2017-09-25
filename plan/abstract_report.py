@@ -4,6 +4,7 @@ import abc
 # Package
 from plan.member import Status
 from plan.serializable import Serializable
+from plan.serializable import reference
 from plan.plugin_registry import PluginRegistry
 from plan.object_registry import ObjectRegistry
 
@@ -12,10 +13,19 @@ class AbstractReport(Serializable, metaclass=abc.ABCMeta):
 
     def __init__(self, event=None, title='', message='', audience=Status.GENERAL):
         super().__init__()
+        self.__event = None
         self.event = event
         self.title = title
         self.message = message
         self.audience = audience
+
+    @reference
+    def event(self):
+        return self.__event
+
+    @event.setter
+    def event(self, value):
+        self.__event = value
 
     def to_dict(self):
         result = super().to_dict()

@@ -38,7 +38,7 @@ class Serializable(metaclass=abc.ABCMeta):
         return {ID_KEY: self.id}
 
 
-class serializable_reference:
+class reference:
     """
     All object references in this framework's object model must be decorated with this class to be serializable.
     It works like a normal property, but the getter will automatically translate ID's into objects using the
@@ -65,6 +65,7 @@ class serializable_reference:
         result = self.fget(obj)
         if isinstance(result, str):
             if self.reference is None or self.reference.id != result:
+                # Store a strong reference from the registry's weakref.
                 self.reference = ObjectRegistry.get(result)
             else:
                 return self.reference
