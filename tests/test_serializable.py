@@ -54,6 +54,9 @@ class TestSerializable(unittest.TestCase):
         self.assertEqual(data[ID_KEY], inst.id)
         self.assertIn(data[ID_KEY], list(ObjectRegistry.OBJECTS.keys()))
 
+        # Can not set ID after it has already been set.
+        self.assertRaises(RuntimeError, partial(setattr, inst, 'id', 'foo'))
+
         # Decode the dictionary and compare with the original object.
         new_inst = Foo.from_dict(data)
         self.assertEqual(inst.foo, new_inst.foo)
