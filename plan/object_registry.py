@@ -16,3 +16,8 @@ class ObjectRegistry:
         if result is None:
             raise LookupError('Object with ID: {} does not exist.'.format(obj_id))
         return result
+
+    @classmethod
+    def clear(cls):
+        """Clear out the registry. Mostly just useful for testing."""
+        cls.OBJECTS = weakref.WeakValueDictionary()

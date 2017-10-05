@@ -1,6 +1,6 @@
 # Python standard library
 import abc
-import hashlib
+import uuid
 
 # Package
 from plan.lib import abstract_classmethod
@@ -16,7 +16,7 @@ class Serializable(metaclass=abc.ABCMeta):
     @property
     def id(self):
         if self.__id is None:
-            self.id = hashlib.md5().hexdigest()
+            self.id = str(uuid.uuid4())
         return self.__id
 
     @id.setter
@@ -29,8 +29,7 @@ class Serializable(metaclass=abc.ABCMeta):
     @abstract_classmethod
     def from_dict(cls, data):
         result = cls()
-        obj_id = data.pop(ID_KEY)
-        result.id = obj_id
+        result.id = data.get(ID_KEY)
         return result
 
     @abc.abstractmethod
@@ -67,6 +66,7 @@ class reference:
             if self.reference is None or self.reference.id != result:
                 # Store a strong reference from the registry's weakref.
                 self.reference = ObjectRegistry.get(result)
+                return self.reference
             else:
                 return self.reference
         else:

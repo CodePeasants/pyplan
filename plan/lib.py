@@ -18,6 +18,15 @@ class Singleton(type):
         return cls.__instances[cls]
 
 
+class abstract_classmethod(classmethod):
+
+    __isabstractmethod__ = True
+
+    def __init__(self, callable):
+        callable.__isabstractmethod__ = True
+        super(abstract_classmethod, self).__init__(callable)
+
+
 def get_time_zone(time_zone=None, threshold=60):
     time_zone = time_zone or TIME_ZONE
     result = process.extract(time_zone, pytz.all_timezones)
