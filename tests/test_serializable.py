@@ -24,20 +24,9 @@ class TestSerializable(unittest.TestCase):
     def test_serializable(self):
         class Foo(Serializable):
             """Serializable is an abstract class, we need a concrete implementation to test."""
-            def __init__(self, foo=None):
+            def __init__(self, foo):
                 super().__init__()
                 self.foo = foo
-
-            @classmethod
-            def from_dict(self, data):
-                result = super().from_dict(data)
-                result.foo = data.get('foo')
-                return result
-
-            def to_dict(self):
-                result = super().to_dict()
-                result['foo'] = self.foo
-                return result
 
         # Construct a serializable object
         bar = 'bar'
@@ -49,9 +38,7 @@ class TestSerializable(unittest.TestCase):
 
         # Encode the object to a dictionary & verify results.
         data = inst.to_dict()
-        self.assertEqual(bar, data['foo'])
-        self.assertIn(ID_KEY, data)
-        self.assertEqual(data[ID_KEY], inst.id)
+        self.assertEqual({ID_KEY: inst.id, 'foo': bar}, data)
         self.assertIn(data[ID_KEY], list(ObjectRegistry.OBJECTS.keys()))
 
         # Can not set ID after it has already been set.
@@ -81,17 +68,6 @@ class TestSerializable(unittest.TestCase):
             @foo.setter
             def foo(self, value):
                 self.__foo = value
-
-            @classmethod
-            def from_dict(self, data):
-                result = super().from_dict(data)
-                result.foo = data.get('foo')
-                return result
-
-            def to_dict(self):
-                result = super().to_dict()
-                result['foo'] = self.foo.id
-                return result
 
         # Ensure we are starting with a clean regisrty
         self.assertFalse(ObjectRegistry.OBJECTS)

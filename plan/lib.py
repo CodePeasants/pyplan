@@ -1,3 +1,6 @@
+# Python standard library
+from uuid import UUID
+
 # 3ps
 from fuzzywuzzy import process
 import pytz
@@ -25,6 +28,16 @@ class abstract_classmethod(classmethod):
     def __init__(self, callable):
         callable.__isabstractmethod__ = True
         super(abstract_classmethod, self).__init__(callable)
+
+
+def is_id_string(value):
+    """Check if the provided string is a valid ID."""
+    try:
+        UUID(value, version=4)
+    except (ValueError, AttributeError, TypeError):
+        return False
+    else:
+        return True
 
 
 def get_time_zone(time_zone=None, threshold=60):
