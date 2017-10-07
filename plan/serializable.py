@@ -1,12 +1,11 @@
 # Python standard library
 import weakref
+import uuid
 import inspect
 from collections import Mapping
 import abc
-import uuid
 
 # Package
-from plan.lib import is_id_string
 from plan.object_registry import ObjectRegistry
 from plan.settings import ID_KEY
 from plan.settings import SUPPORTED_REFERENCE_ITERABLES
@@ -17,10 +16,22 @@ class Serializable(metaclass=abc.ABCMeta):
     def __init__(self):
         self.__id = None
 
+    def __eq__(self, other):
+        if not isinstance(other, Serializable):
+            raise TypeError('Cannot check equality with {} of type {}'.format(other, type(other)))
+        my_data = self.to_dict()
+        other_data = other.to_dict()
+        my_data.pop(ID_KEY)
+        other_data.pop(ID_KEY)
+        return my_data == other_data
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     @property
     def id(self):
         if self.__id is None:
-            self.id = str(uuid.uuid4())
+            self.id = get_id()
         return self.__id
 
     @id.setter
@@ -34,8 +45,19 @@ class Serializable(metaclass=abc.ABCMeta):
     def from_dict(cls, data):
         kwargs = dict(data)  # Make a shallow copy, so when we pop the ID out we don't mutate the source dictionary.
         obj_id = kwargs.pop(ID_KEY)
-        result = cls(**kwargs)
-        result.id = obj_id
+
+        # If the object we're decoding is already in memory, update the existing object instead of creating a new one.
+        try:
+            result = ObjectRegistry.get(obj_id)
+        except LookupError:
+            result = None
+
+        if result:
+            for key, value in kwargs.items():
+                setattr(result, key, value)
+        else:
+            result = cls(**kwargs)
+            result.id = obj_id
         return result
 
     def to_dict(self):
@@ -63,6 +85,9 @@ class reference(metaclass=abc.ABCMeta):
     but object B has not been deserialized yet, you would get an error. This allows you to set object A's reference to
     object B as it's ID. Only when it gets called the first time will it resolve to the actual object.
     """
+
+    WEAK = False
+
     def __init__(self, fget=None, fset=None, fdel=None, doc=None):
         self.fget = fget
         self.fset = fset
@@ -73,31 +98,6 @@ class reference(metaclass=abc.ABCMeta):
 
         self.__dirty = False
 
-    def __lookup(self, data):
-        """
-        Recursively expand nested data structures from ID's into objects from the registry.
-        """
-        if isinstance(data, Mapping):
-            return data.__class__((k, self.__lookup(v)) for k, v in data.items())
-        elif isinstance(data, SUPPORTED_REFERENCE_ITERABLES):
-            return data.__class__(self.__lookup(x) for x in data)
-        elif isinstance(data, str):
-            return self._get_reference(ObjectRegistry.get(data))
-        else:
-            return self._get_reference(data)
-
-    def __has_id(self, value):
-        if isinstance(value, Mapping):
-            return any(self.__has_id(x) for x in value.values())
-        elif isinstance(value, SUPPORTED_REFERENCE_ITERABLES):
-            return any(self.__has_id(x) for x in value)
-        else:
-            return is_id_string(value)
-
-    def _get_reference(self, data):
-        """Makes it easy to sub-class for weak references."""
-        return data
-
     def __get__(self, obj, cls):
         if obj is None:
             return self
@@ -105,14 +105,15 @@ class reference(metaclass=abc.ABCMeta):
             raise AttributeError('Un-readable attribute.')
 
         if self.__dirty:
-            self.fset(obj, self.__lookup(self.fget(obj)))
+            self.fset(obj, expand_ids(self.fget(obj), self.WEAK))
+            self.__dirty = False
         return self.fget(obj)
 
     def __set__(self, obj, value):
         if self.fset is None:
             raise AttributeError('Cannot set attribute.')
         # todo check if an ID is included, if so set dirty.
-        if not self.__dirty and self.__has_id(value):
+        if not self.__dirty and has_id(value):
             self.__dirty = True
         self.fset(obj, value)
 
@@ -133,8 +134,62 @@ class reference(metaclass=abc.ABCMeta):
 
 class weak_reference(reference):
 
-    def _get_reference(self, data):
-        try:
-            return weakref.proxy(data)
-        except TypeError:
-            return data
+    WEAK = True
+
+
+def get_id():
+    """Get a valid Serializable object ID."""
+    return str(uuid.uuid4())
+
+
+def is_id(value):
+    """Check if the provided string is a valid ID."""
+    try:
+        uuid.UUID(value, version=4)
+    except (ValueError, AttributeError, TypeError):
+        return False
+    else:
+        return True
+
+
+def expand_ids(data, weak=False):
+    """
+    Recursively expand nested data structures from ID's into objects from the registry.
+
+    :param object data:
+        ID string, Serializable object or supported collection type that contains one or more of these.
+    :param bool weak:
+        If True, will try to return a weak reference to the expanded object instead of a strong reference.
+    """
+    def _return(return_data):
+        if weak:
+            try:
+                return weakref.proxy(return_data)
+            except TypeError:
+                return return_data
+        return return_data
+
+    if isinstance(data, Mapping):
+        return data.__class__((k, expand_ids(v, weak)) for k, v in data.items())
+    elif isinstance(data, SUPPORTED_REFERENCE_ITERABLES):
+        return data.__class__(expand_ids(x, weak) for x in data)
+    elif is_id(data):
+        return _return(ObjectRegistry.get(data))
+    else:
+        return _return(data)
+
+
+def has_id(data):
+    """
+    Check if the provided data is or has a Serializable ID.
+
+    :param object data:
+        ID string, Serializable object or supported collection type that contains one or more of these.
+    :rtype bool:
+    """
+    if isinstance(data, Mapping):
+        return any(has_id(x) for x in data.values())
+    elif isinstance(data, SUPPORTED_REFERENCE_ITERABLES):
+        return any(has_id(x) for x in data)
+    else:
+        return is_id(data)
