@@ -192,27 +192,62 @@ class TestSerializable(unittest.TestCase):
 
     def test_reference(self):
         """Setting and getting a reference normally."""
-        pass
+        foo = Reference()
+        bar = Basic('foo')
+
+        self.assertIs(None, foo.foo)
+        foo.foo = bar
+        self.assertIs(bar, foo.foo)
+        foo.foo = None
+        self.assertIs(None, foo.foo)
 
     def test_reference_id(self):
         """Set reference property to an ID & getting an object back."""
-        pass
+        foo = Reference()
+        bar = Basic('foo')
+
+        foo.foo = bar.id
+        self.assertIs(bar, foo.foo)
 
     def test_reference_strong(self):
         """Returned object from an ID should be a strong reference."""
-        pass
+        foo = Reference()
+        bar = Basic('foo')
+
+        foo.foo = bar.id
+        self.assertFalse(isinstance(foo.foo, weakref.ProxyTypes))
+        del bar
+        self.assertIsInstance(foo.foo, Basic)
 
     def test_weak_reference(self):
         """Setting and getting a weak reference normally."""
-        pass
+        foo = Reference()
+        bar = Basic('foo')
+        foo.bar = bar
+
+        self.assertIsNot(bar, foo.bar)  # A weak proxy is not the object it is a proxy of.
+        self.assertEqual(bar, foo.bar)  # It does however, have all of the same data & pointers.
+        self.assertEqual(bar.id, foo.bar.id)
+        self.assertIsInstance(foo.bar, weakref.ProxyTypes)
 
     def test_weak_reference_id(self):
         """Set reference property to an ID & getting a weak reference back."""
-        pass
+        foo = Reference()
+        bar = Basic('foo')
+        foo.bar = bar.id
+
+        self.assertTrue(foo.bar)
 
     def test_weak_reference_weak(self):
         """Returned object from an ID should be a weak reference."""
-        pass
+        foo = Reference()
+        bar = Basic('foo')
+        foo.bar = bar.id
+
+        self.assertTrue(foo.bar)
+        self.assertIsInstance(foo.bar, weakref.ProxyTypes)
+        del bar
+        self.assertRaises(ReferenceError, partial(bool, foo.bar))
 
     def test_weak_reference_mismatch(self):
         """
@@ -222,11 +257,27 @@ class TestSerializable(unittest.TestCase):
         we will actually store a strong reference when the object is created, but get a weak reference when it is
         decoded. This case should be avoided!
         """
-        pass
+        foo = Reference()
+        bar = Basic('foo')
+        foo.bizz = bar
 
-    def test_references_round_trip(self):
-        """Integration test where we store weak & strong nested references, encode then decode."""
-        pass
+        # Initially this is actually a strong reference...
+        self.assertTrue(foo.bizz)
+        del bar
+        self.assertTrue(foo.bizz)
+        bar = foo.bizz
+
+        data = foo.to_dict()
+        del foo
+
+        # After decoding however, we now have the same data, but a weak reference.
+        foo = Reference.from_dict(data)
+        self.assertIsNot(bar, foo.bizz)
+        self.assertEqual(bar, foo.bizz)
+        self.assertEqual(bar.id, foo.bizz.id)
+        self.assertIsInstance(foo.bizz, weakref.ProxyTypes)
+        del bar
+        self.assertRaises(ReferenceError, partial(bool, foo.bizz))
 
 
 class Basic(Serializable):
@@ -238,13 +289,14 @@ class Basic(Serializable):
 
 class Reference(Serializable):
     """Serializable is an abstract class, we need a concrete implementation to test."""
-    def __init__(self, foo=None, bar=None):
+    def __init__(self, foo=None, bar=None, bizz=None):
         super().__init__()
         self.__foo = None
         self.__bar = None
         self.__bizz = None
         self.foo = foo
         self.bar = bar
+        self.bizz = bizz
 
     @reference
     def foo(self):
@@ -255,12 +307,23 @@ class Reference(Serializable):
         self.__foo = value
 
     @weak_reference
-    def foo(self):
-        return self.__foo
+    def bar(self):
+        return self.__bar
 
-    @foo.setter
-    def foo(self, value):
-        self.__foo = value
+    @bar.setter
+    def bar(self, value):
+        try:
+            self.__bar = weakref.proxy(value)
+        except TypeError:
+            self.__bar = value
+
+    @weak_reference
+    def bizz(self):
+        return self.__bizz
+
+    @bizz.setter
+    def bizz(self, value):
+        self.__bizz = value
 
 
 def main():
