@@ -1,9 +1,14 @@
+# Python standard library
 import sys
 
+# Package
+from plan.serializable import Serializable
 
-class Requirement:
+
+class Requirement(Serializable):
 
     def __init__(self, minimum=None, maximum=None):
+        super().__init__()
         self.__min = None
         self.__max = None
 

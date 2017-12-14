@@ -1,8 +1,12 @@
+# Python standard lib
 from datetime import datetime
 from pytz import timezone
 
+# Package
+from plan.serializable import Serializable
 
-class TimeRange:
+
+class TimeRange(Serializable):
 
     def __init__(self, start, end=None):
         if end is None:

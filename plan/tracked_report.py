@@ -1,13 +1,12 @@
 # Python standard library.
-import pickle
 from enum import Enum
 from enum import auto
 import abc
 
+# Package
 from plan.serializable import Serializable
 from plan.time_range import TimeRange
 from plan.schedule import Schedule
-from plan.abstract_report import AbstractReport
 
 
 class State(Enum):
@@ -27,22 +26,6 @@ class TrackedReport(Serializable, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def resolve_state(self):
         pass
-
-    def to_dict(self):
-        result = super().to_dict()
-        result['report'] = self.report.to_dict()
-        result['state'] = self.state.value
-        return result
-
-    def from_dict(cls, data):
-        result = super().from_dict(data)
-        result.state = State(data.get('state'))
-
-        report_dict = data.get('report')
-        report_cls = AbstractReport.get_type(report_dict)
-        report = report_cls.from_dict(report_dict)
-        result.report = report
-        return result
 
 
 class ScheduledReport(TrackedReport):
@@ -71,12 +54,6 @@ class ScheduledReport(TrackedReport):
                     self.state = State.READY
 
         return self.state
-
-    def to_dict(self):
-        result = super().to_dict()
-        result['schedule'] = self.schedule.to_dict()
-        result['last_send'] = self.last_send
-        return result
 
 
 class TriggerReport(TrackedReport):
@@ -111,14 +88,3 @@ class TriggerReport(TrackedReport):
         if self.trigger is not None and self.trigger():
             self.state = State.READY
         return self.state
-
-    def to_dict(self):
-        result = super().to_dict()
-        result['trigger'] = pickle.dumps(self.trigger)
-        return result
-
-    @classmethod
-    def from_dict(cls, data):
-        result = super().from_dict(data)
-        result.trigger = pickle.loads(data.get('trigger'))
-        return result

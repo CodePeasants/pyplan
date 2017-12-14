@@ -1,5 +1,10 @@
+# Python standard library
 from enum import Enum
 from enum import auto
+
+# Package
+from plan.serializable import Serializable
+from plan.serializable import reference
 
 
 class Status(Enum):
@@ -16,10 +21,10 @@ class Status(Enum):
     ACTIVE = INVITED | PARTICIPATING | SUBSCRIBED  # Those explicitly involved.
 
 
-class Member:
+class Member(Serializable):
 
     def __init__(self, user, status=Status.NOT_INVITED):
-        self.user = user
+        self.__user = user
         self.status = status
 
     def __repr__(self):
@@ -33,3 +38,7 @@ class Member:
     @property
     def name(self):
         return self.user.name
+
+    @reference
+    def user(self):
+        return self.__user

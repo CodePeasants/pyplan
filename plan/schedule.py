@@ -1,13 +1,18 @@
+# Python standard lib
 from datetime import datetime
 from pytz import timezone
+
+# Package
+from plan.serializable import Serializable
 from plan.time_range import TimeRange
 from plan.lib import get_time_zone
 from logger import log
 
 
-class Schedule:
+class Schedule(Serializable):
 
     def __init__(self, time_zone=None):
+        super().__init__()
         self.__times = []
         self.__time_zone = time_zone or timezone('UTC')
 

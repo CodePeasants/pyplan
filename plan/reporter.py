@@ -4,6 +4,7 @@ import threading
 # Package
 from plan.ticker import Ticker
 from plan.serializable import Serializable
+from plan.serializable import reference
 from plan.tracked_report import State
 
 
@@ -14,9 +15,20 @@ class Reporter(Serializable):
 
     def __init__(self, tracked_reports=None):
         super().__init__()
-        self.tracked_reports = tracked_reports or []
+        self.__tracked_reports = []
         self.__ticker = Ticker()
         self.__ticker.add_callback(self._tick)
+
+        if tracked_reports is not None:
+            self.tracked_reports = tracked_reports
+
+    @reference
+    def tracked_reports(self):
+        return self.__tracked_reports
+
+    @tracked_reports.setter
+    def tracked_reports(self, value):
+        self.tracked_reports = value
 
     @property
     def is_alive(self):

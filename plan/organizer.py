@@ -1,14 +1,69 @@
+# Python standard library
+import weakref
+
+# Package
+from plan.serializable import Serializable
+from plan.serializable import reference
+from plan.serializable import weak_reference
 from plan.member import Status
-from logger import log
+from plan.logger import log
 
 
-class Organizer:
+class Organizer(Serializable):
 
     def __init__(self, event, potential_schedules=None, schedule=None, votes=None):
-        self.__event = event
-        self.__potential_schedules = potential_schedules or set()
-        self.__schedule = schedule
-        self.__votes = votes or {}
+        super().__init__()
+        self.__event = None
+        self.__potential_schedules = set()
+        self.__schedule = None
+        self.__votes = {}
+
+        if event is not None:
+            self.event = event
+
+        if potential_schedules is not None:
+            self.potential_schedules = potential_schedules
+
+        if schedule is not None:
+            self.schedule = schedule
+
+        if votes is not None:
+            self.__votes = votes
+
+    @weak_reference
+    def event(self):
+        return self.__event
+
+    @event.setter
+    def event(self, value):
+        try:
+            self.__event = weakref.proxy(value)
+        except TypeError:
+            self.__event = value
+
+    @reference
+    def schedule(self):
+        return self.__schedule
+
+    @schedule.setter
+    def schedule(self, value):
+        self.__schedule = value
+
+    @reference
+    def potential_schedules(self):
+        return self.__potential_schedules
+
+    @potential_schedules.setter
+    def potential_schedules(self, value):
+        self.__potential_schedules = value
+
+    @reference
+    def votes(self):
+        return self.__votes
+
+    @votes.setter
+    def votes(self, value):
+        self.__votes = value
 
     def confirm_schedule(self, schedule=None):
         if schedule is None:
@@ -18,18 +73,6 @@ class Organizer:
 
     def unconfirm_schedule(self):
         self.__schedule = None
-
-    @property
-    def schedule(self):
-        return self.__schedule
-
-    @property
-    def potential_schedules(self):
-        return self.__potential_schedules
-
-    @property
-    def votes(self):
-        return self.__votes
 
     def get_best_schedule(self):
         """Pick the most popular, earliest schedule."""

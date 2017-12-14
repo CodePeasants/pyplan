@@ -3,7 +3,7 @@ Channels transmit reports to event members. You may create your own channel type
 inheriting this interface and using the plugin metaclass.
 """
 
-# Python
+# Python standard lib
 import weakref
 import abc
 

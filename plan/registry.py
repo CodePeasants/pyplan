@@ -1,11 +1,17 @@
+"""Member registry for events."""
+
+# Package
+from plan.serializable import Serializable
+from plan.serializable import reference
 from plan.member import Status
 from plan.member import Member
 from plan.requirement import Requirement
 
 
-class Registry:
+class Registry(Serializable):
 
     def __init__(self, members=None, requirement=None):
+        super().__init__()
         self.__members = []
         self.__requirement = Requirement()
 
@@ -14,7 +20,7 @@ class Registry:
         if requirement is not None:
             self.requirement = requirement
 
-    @property
+    @reference
     def members(self):
         return self.__members
 
@@ -27,7 +33,7 @@ class Registry:
         for member in value:
             self.register(member.user, member.status)
 
-    @property
+    @reference
     def requirement(self):
         return self.__requirement
 
