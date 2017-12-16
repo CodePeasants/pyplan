@@ -28,7 +28,10 @@ class abstract_classmethod(classmethod):
 
 
 def get_time_zone(time_zone=None, threshold=60):
-    time_zone = time_zone or TIME_ZONE
+    if time_zone is None:
+        return TIME_ZONE
+
+    time_zone = time_zone
     result = process.extract(time_zone, pytz.all_timezones)
     if result[0][1] < threshold:
         raise ValueError('{time_zone} is an invalid time zone!'.format(**locals()))
