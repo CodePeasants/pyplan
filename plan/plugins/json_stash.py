@@ -31,7 +31,7 @@ class JSONStash(AbstractStash, metaclass=RegisterMeta):
             with open(data_path, 'r') as fh:
                 return Manager.from_dict(json.load(fh))
         except FileNotFoundError:
-            log.warning('Data stash file: {data_path} not found.'.format(**locals()))
+            log.warning(f'Data stash file: {data_path} not found.')
         return {}
 
     @staticmethod

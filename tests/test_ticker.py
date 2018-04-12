@@ -61,7 +61,7 @@ class TestTicker(unittest.TestCase):
         self.stream.seek(0)
         self.assertEqual('11', self.stream.read())
 
-        # Note: there is no way to kill the thread itself, but we can stop the work it is doing.
+        # Note: We do not kill the thread itself. Instead, we stop the work it is doing.
         self.assertFalse(self.ticker.is_ticking)
         self.assertTrue(self.ticker.is_alive())
 

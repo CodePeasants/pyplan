@@ -27,7 +27,7 @@ class Registry(Serializable):
     @members.setter
     def members(self, value):
         if not hasattr(value, '__iter__') or not all(isinstance(x, Member) for x in value):
-            raise TypeError('{} of type {} must be an iterable of Members!'.format(value, type(value)))
+            raise TypeError(f'{value} of type {type(value)} must be an iterable of Members!')
 
         self.__members = []
         for member in value:
@@ -47,15 +47,15 @@ class Registry(Serializable):
         if isinstance(value, Requirement):
             if value < participants:
                 raise ValueError(
-                    'The current number of participants: {} is greater than the new required range: {}'
-                    .format(participants, value)
+                    f'The current number of participants: {participants} is greater than'
+                    ' the new required range: {value}'
                 )
             self.__requirement = value
         elif isinstance(value, int):
             self.__requirement = Requirement(value)
         else:
             raise TypeError(
-                'Invalid requirement: {} of type: {}. Expected Requiremnt or int.'.format(value, type(value))
+                f'Invalid requirement: {value} of type: {type(value)}. Expected Requiremnt or int.'
             )
 
     @property

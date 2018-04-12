@@ -6,25 +6,21 @@ from pytz import timezone
 from plan.serializable import Serializable
 from plan.time_range import TimeRange
 from plan.lib import get_time_zone
-from logger import log
+from plan.logger import log
 
 
 class Schedule(Serializable):
 
-    def __init__(self, time_zone=None):
+    def __init__(self, times=None, time_zone=None):
         super().__init__()
-        self.__times = []
+        self.__times = times or []
         self.__time_zone = time_zone or timezone('UTC')
 
     def __hash__(self):
-        return hash('{}{}'.format(self.__time_zone, self.__times))
+        return hash(f'{self.__time_zone}{self.__times}')
 
     def __repr__(self):
-        return '<{0.__class__.__name__} time zone: {0.time_zone} times: {1} at {2}>'.format(
-            self,
-            len(self.times),
-            hex(id(self))
-        )
+        return f'<{self.__class__.__name__} time zone: {self.time_zone} times: {len(self.times)} at {hex(id(self))}>'
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -33,8 +29,7 @@ class Schedule(Serializable):
             return len(self.times) == 1 and self.times[0] == other
         else:
             raise TypeError(
-                '{} cannot be compared against {} of type {}.'
-                .format(self.__class__.__name__, other, type(other))
+                f'{self.__class__.__name__} cannot be compared against {other} of type {type(other)}.'
             )
 
     def __ne__(self, other):
@@ -97,10 +92,10 @@ class Schedule(Serializable):
         self.__time_zone = get_time_zone(time_zone)
 
     @classmethod
-    def now(cls):
+    def now(cls, time_zone=None):
         """Returns a Schedule object with only the current time added."""
-        result = cls()
-        result.add_time(TimeRange.now())
+        result = cls(time_zone)
+        result.add_time(TimeRange.now(time_zone))
         return result
 
     def add_time(self, time):
@@ -111,7 +106,7 @@ class Schedule(Serializable):
 
         for time_range in self.times:
             if converted in time_range:
-                log.warning('Given time: {} already included in scheduled times. Nothing to do.'.format(time_range))
+                log.warning(f'Given time: {time_range} already included in scheduled times. Nothing to do.')
                 return
 
         self.times.append(time)

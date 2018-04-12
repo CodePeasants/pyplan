@@ -1,6 +1,5 @@
 # Python standard lib
 from datetime import datetime
-from pytz import timezone
 
 # Package
 from plan.serializable import Serializable
@@ -53,7 +52,7 @@ class TimeRange(Serializable):
         elif isinstance(other, datetime):
             return self.start > other
         else:
-            raise TypeError('Cannot compare {} to {}.'.format(self.__class__.__name__, type(other)))
+            raise TypeError(f'Cannot compare {self.__class__.__name__} to {type(other)}.')
 
     def __ge__(self, other):
         if isinstance(other, self.__class__):
@@ -61,7 +60,7 @@ class TimeRange(Serializable):
         elif isinstance(other, datetime):
             return self.end <= other
         else:
-            raise TypeError('Cannot compare {} to {}.'.format(self.__class__.__name__, type(other)))
+            raise TypeError(f'Cannot compare {self.__class__.__name__} to {type(other)}.')
 
     def __lt__(self, other):
         if isinstance(other, self.__class__):
@@ -69,7 +68,7 @@ class TimeRange(Serializable):
         elif isinstance(other, datetime):
             return self.end < other
         else:
-            raise TypeError('Cannot compare {} to {}.'.format(self.__class__.__name__, type(other)))
+            raise TypeError(f'Cannot compare {self.__class__.__name__} to {type(other)}.')
 
     def __le__(self, other):
         if isinstance(other, self.__class__):
@@ -77,7 +76,7 @@ class TimeRange(Serializable):
         elif isinstance(other, datetime):
             return self.end <= other
         else:
-            raise TypeError('Cannot compare {} to {}.'.format(self.__class__.__name__, type(other)))
+            raise TypeError(f'Cannot compare {self.__class__.__name__} to {type(other)}.')
 
     def astimezone(self, time_zone):
         start = self.start.astimezone(time_zone)

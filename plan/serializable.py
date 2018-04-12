@@ -18,7 +18,7 @@ class Serializable(metaclass=abc.ABCMeta):
 
     def __eq__(self, other):
         if not isinstance(other, Serializable):
-            raise TypeError('Cannot check equality with {} of type {}'.format(other, type(other)))
+            raise TypeError(f'Cannot check equality with {other} of type {type(other)}')
         my_data = self.to_dict()
         other_data = other.to_dict()
         my_data.pop(ID_KEY)
@@ -37,7 +37,7 @@ class Serializable(metaclass=abc.ABCMeta):
     @id.setter
     def id(self, value):
         if self.__id is not None:
-            raise RuntimeError('Cannot set ID for object {} more than once!'.format(self))
+            raise RuntimeError(f'Cannot set ID for object {self} more than once!')
         self.__id = value
         ObjectRegistry.register(self)
 

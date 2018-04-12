@@ -34,6 +34,6 @@ def get_time_zone(time_zone=None, threshold=60):
     time_zone = time_zone
     result = process.extract(time_zone, pytz.all_timezones)
     if result[0][1] < threshold:
-        raise ValueError('{time_zone} is an invalid time zone!'.format(**locals()))
+        raise ValueError(f'{time_zone} is an invalid time zone!')
 
     return timezone(result[0][0])

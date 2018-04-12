@@ -29,8 +29,8 @@ class Ticker(threading.Thread):
                 cast = float(value)
             except ValueError:
                 raise TypeError(
-                    '{} of type {} is not a valid argument for tick_rate. Must be convertible to float.'
-                    .format(value, type(value))
+                    f'{value} of type {type(value)} is not a valid argument for tick_rate.'
+                    ' Must be convertible to float.'
                 )
         self.__tick_rate = cast
 

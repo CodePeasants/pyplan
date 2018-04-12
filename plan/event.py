@@ -95,7 +95,7 @@ class Event(Serializable):
             else:
                 self.__parent = None
         else:
-            raise TypeError('Cannot parent Event to: {} of type: {}'.format(value, type(value)))
+            raise TypeError(f'Cannot parent Event to: {value} of type: {type(value)}')
 
     @reference
     def children(self):

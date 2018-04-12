@@ -26,7 +26,8 @@ class TestTimeRange(unittest.TestCase):
     def test_eq(self):
         foo = TimeRange(datetime(2015, 1, 1, tzinfo=pytz.UTC), datetime(2016, 1, 1, tzinfo=pytz.UTC))
         self.assertEqual(TimeRange(datetime(2015, 1, 1, tzinfo=pytz.UTC), datetime(2016, 1, 1, tzinfo=pytz.UTC)), foo)
-        self.assertNotEqual(TimeRange(datetime(2015, 1, 1, tzinfo=pytz.UTC), datetime(2016, 1, 2, tzinfo=pytz.UTC)), foo)
+        self.assertNotEqual(TimeRange(datetime(2015, 1, 1, tzinfo=pytz.UTC),
+                            datetime(2016, 1, 2, tzinfo=pytz.UTC)), foo)
 
     def test_astimezone(self):
         foo = TimeRange(datetime(2015, 10, 1, 10, 30, tzinfo=pytz.UTC), datetime(2016, 10, 1, 15, 30, tzinfo=pytz.UTC))

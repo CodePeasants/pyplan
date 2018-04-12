@@ -18,7 +18,7 @@ class Requirement(Serializable):
             self.max = maximum
 
     def __repr__(self):
-        return '{0.__class__.__name__}({0.min}, {0.max})'.format(self)
+        return f'{self.__class__.__name__}({self.min}, {self.max})'
 
     def __contains__(self, item):
         return self.min <= item <= self.max
@@ -89,7 +89,7 @@ class Requirement(Serializable):
     @min.setter
     def min(self, value):
         if self.max is not None and value > self.max:
-            raise ValueError('Cannot have a min value: {} greater than max value: {}'.format(value, self.max))
+            raise ValueError(f'Cannot have a min value: {value} greater than max value: {self.max}')
         self.__min = value
 
     @property
@@ -102,5 +102,5 @@ class Requirement(Serializable):
     @max.setter
     def max(self, value):
         if self.min is not None and value < self.min:
-            raise ValueError('Cannot have a max value: {} less than min value: {}'.format(value, self.min))
+            raise ValueError(f'Cannot have a max value: {value} less than min value: {self.min}')
         self.__max = value

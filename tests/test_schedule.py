@@ -1,5 +1,9 @@
+# Python standard lib
 import unittest
+
+# Package
 from plan.schedule import Schedule
+from plan.time_range import TimeRange
 
 
 class TestSchedule(unittest.TestCase):
@@ -11,6 +15,15 @@ class TestSchedule(unittest.TestCase):
         pass
 
     def test_operators(self):
+        pass
+
+    def test_add_time(self):
+        pass
+
+    def test_remove_time(self):
+        pass
+
+    def test_now(self):
         pass
 
 

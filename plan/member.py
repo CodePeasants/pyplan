@@ -28,12 +28,7 @@ class Member(Serializable):
         self.status = status
 
     def __repr__(self):
-        return '<{0} user={1} status={2} at {3}>'.format(
-            self.__class__.__name__,
-            self.name,
-            self.status,
-            hex(id(self))
-        )
+        return f'<{self.__class__.__name__} user={self.name} status={self.status} at {hex(id(self))}>'
 
     @property
     def name(self):

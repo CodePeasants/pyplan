@@ -92,14 +92,14 @@ class Organizer(Serializable):
     def vote(self, member, schedule):
         if schedule not in self.potential_schedules:
             raise ValueError(
-                'Schedule: {} is not among potential schedules: {}'.format(schedule, self.potential_schedules)
+                f'Schedule: {schedule} is not among potential schedules: {self.potential_schedules}'
             )
 
         if member not in self.__event.registry.members:
-            raise PermissionError('{} is not a member of {}'.format(member, self.__event))
+            raise PermissionError(f'{member} is not a member of {self.__event}')
 
         if member.status not in [Status.INVITED, Status.PARTICIPATING]:
-            raise PermissionError('{member} does not have permission to vote!'.format(**locals()))
+            raise PermissionError(f'{member} does not have permission to vote!')
 
         if member not in self.votes:
             self.votes[member] = set()
@@ -110,7 +110,7 @@ class Organizer(Serializable):
 
     def remove_potential_schedule(self, schedule):
         if schedule not in self.potential_schedules:
-            log.warning('Schedule: {} not in potential schedules. Nothing to do.'.format(schedule))
+            log.warning(f'Schedule: {schedule} not in potential schedules. Nothing to do.')
             return
 
         # Check if any members have voted for the schedule being removed.

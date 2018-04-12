@@ -19,7 +19,7 @@ class PluginRegistry:
         elif AbstractStash in mro:
             cls.STASH = other
         else:
-            raise TypeError('{} of type {} cannot be registered.'.format(other, type(other)))
+            raise TypeError(f'{other} of type {type(other)} cannot be registered.')
 
     @classmethod
     def de_register(cls, other):
@@ -30,7 +30,7 @@ class PluginRegistry:
         elif AbstractStash in mro:
             cls.STASH = None
         else:
-            raise TypeError('{} of type {} cannot be registered.'.format(other, type(other)))
+            raise TypeError(f'{other} of type {type(other)} cannot be registered.')
 
 
 class RegisterMeta(type):

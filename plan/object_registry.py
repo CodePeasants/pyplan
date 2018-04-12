@@ -14,7 +14,7 @@ class ObjectRegistry:
     def get(cls, obj_id):
         result = cls.OBJECTS.get(obj_id)
         if result is None:
-            raise LookupError('Object with ID: {} does not exist.'.format(obj_id))
+            raise LookupError(f'Object with ID: {obj_id} does not exist.')
         return result
 
     @classmethod
