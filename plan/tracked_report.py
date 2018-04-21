@@ -72,7 +72,7 @@ class TriggerReport(TrackedReport):
         Because we use the object registry to get the event by it's ID, this trigger will survive
         serialization & deserialization.
 
-        :param AbstractReport report:
+        :param Report report:
             The report to be sent.
         :param func trigger:
             Callable that returns a boolean. This will be evaluated on each reporter tick. When it evaluates to True,
@@ -82,7 +82,7 @@ class TriggerReport(TrackedReport):
         self.trigger = trigger
 
     def resolve_state(self):
-        if self.state not in (State.UNSENT):
+        if self.state != State.UNSENT:
             return self.state
 
         if self.trigger is not None and self.trigger():

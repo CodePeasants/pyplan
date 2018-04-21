@@ -4,7 +4,7 @@ import unittest
 # Package
 from plan.user import User
 from plan.event import Event
-from plan.report.print_report import PrintReport
+from plan.plugins.print_report import PrintReport
 
 
 class TestReport(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestReport(unittest.TestCase):
         expected_result = ('title: title\n'
                            'message:\n'
                            'message')
-        self.assertEqual(expected_result, report.format())
+        self.assertEqual(expected_result, report.render())
 
     def test_get_members(self):
         pass

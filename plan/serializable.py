@@ -6,9 +6,11 @@ from collections import Mapping
 import abc
 
 # Package
-from plan.object_registry import ObjectRegistry
 from plan.settings import ID_KEY
+from plan.settings import TYPE_KEY
 from plan.settings import SUPPORTED_REFERENCE_ITERABLES
+from plan.object_registry import ObjectRegistry
+from plan.plugin_registry import PluginRegistry
 
 
 class Serializable(metaclass=abc.ABCMeta):
@@ -41,10 +43,19 @@ class Serializable(metaclass=abc.ABCMeta):
         self.__id = value
         ObjectRegistry.register(self)
 
-    @classmethod
-    def from_dict(cls, data):
-        kwargs = dict(data)  # Make a shallow copy, so when we pop the ID out we don't mutate the source dictionary.
+    @staticmethod
+    def from_dict(data):
+        """
+        This will de-serialize a single Serializable node from a dictionary.
+
+        :param dict data:
+            Serialized Serializable node to load.
+        :rtype Serializable:
+        """
+        # Make a shallow copy, so when we pop the ID out we don't mutate the source dictionary.
+        kwargs = data.copy()
         obj_id = kwargs.pop(ID_KEY)
+        obj_type = kwargs.pop(TYPE_KEY)
 
         # If the object we're decoding is already in memory, update the existing object instead of creating a new one.
         try:
@@ -56,14 +67,20 @@ class Serializable(metaclass=abc.ABCMeta):
             for key, value in kwargs.items():
                 setattr(result, key, value)
         else:
+            cls = PluginRegistry.get(obj_type)
             result = cls(**kwargs)
             result.id = obj_id
         return result
 
     def to_dict(self):
+        """
+        This will serialize this node as a dictionary. It will write any Serializable node references as ID's.
+
+        :rtype dict:
+        """
         arg_spec = inspect.getargspec(self.__init__)
 
-        result = {ID_KEY: self.id}
+        result = {ID_KEY: self.id, TYPE_KEY: self.__class__.__name__}
         for key in arg_spec.args:
             if key == 'self':
                 continue

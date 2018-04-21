@@ -10,7 +10,6 @@ import abc
 # Package
 from plan.serializable import Serializable
 from plan.serializable import reference
-from plan.plugin_registry import PluginRegistry
 
 
 class AbstractChannel(Serializable, metaclass=abc.ABCMeta):
@@ -36,7 +35,7 @@ class AbstractChannel(Serializable, metaclass=abc.ABCMeta):
         """
         Get the event members the report is targetting.
 
-        :param AbstractReport report:
+        :param Report report:
             Report to get members for.
         """
         return self.event.registry.get(status=report.audience)
@@ -46,7 +45,7 @@ class AbstractChannel(Serializable, metaclass=abc.ABCMeta):
         """
         Get explicit member addresses for the send method (e.g. email addresses).
 
-        :param AbstractReport report:
+        :param Report report:
             Report to get addresses for.
         """
         pass
@@ -62,11 +61,3 @@ class AbstractChannel(Serializable, metaclass=abc.ABCMeta):
     def send(self):
         """Transmit report."""
         pass
-
-    @staticmethod
-    def get_type(data):
-        """Given a dictionary of serialized report data, get the AbstractReport sub-class to load the data with."""
-        class_name = data.pop('__type__')
-        for cls in PluginRegistry.REPORT:
-            if cls.__name__ == class_name:
-                return cls

@@ -1,8 +1,8 @@
-from plan.abstract_report import AbstractReport
+from plan.report import Report
 from plan.plugin_registry import RegisterMeta
 
 
-class EmailReport(AbstractReport, metaclass=RegisterMeta):
+class EmailReport(Report, metaclass=RegisterMeta):
 
-    def format(self):
+    def render(self):
         pass  # todo
