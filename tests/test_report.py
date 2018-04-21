@@ -25,9 +25,5 @@ class TestReport(unittest.TestCase):
         pass
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

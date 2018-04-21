@@ -66,9 +66,5 @@ class TestTicker(unittest.TestCase):
         self.assertTrue(self.ticker.is_alive())
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

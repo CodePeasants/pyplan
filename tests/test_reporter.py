@@ -51,9 +51,5 @@ class TestReporter(unittest.TestCase):
     #     self.assertFalse(self.reporter.reports)
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

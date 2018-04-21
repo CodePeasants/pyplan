@@ -60,9 +60,5 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(event_d.children[0] is event_b)
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

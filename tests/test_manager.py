@@ -42,9 +42,5 @@ class TestManager(unittest.TestCase):
         self.assertTrue(Manager().events[0] is event)
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

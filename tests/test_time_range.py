@@ -46,9 +46,5 @@ class TestTimeRange(unittest.TestCase):
         self.assertGreater(dt, foo)
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

@@ -117,9 +117,5 @@ class TestOrganizer(unittest.TestCase):
         self.assertEqual(None, org.schedule)
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

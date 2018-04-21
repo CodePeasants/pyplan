@@ -57,9 +57,5 @@ class TestRegistry(unittest.TestCase):
         self.assertTrue(reg.requirement_met)
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

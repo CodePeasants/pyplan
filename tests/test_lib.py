@@ -22,9 +22,5 @@ class TestLib(unittest.TestCase):
         self.assertRaises(ValueError, func)
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()

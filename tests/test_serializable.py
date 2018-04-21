@@ -326,9 +326,5 @@ class Reference(Serializable):
         self.__bizz = value
 
 
-def main():
-    unittest.main()
-
-
 if __name__ == '__main__':
-    main()
+    unittest.main()
