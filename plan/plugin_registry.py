@@ -4,19 +4,16 @@ import inspect
 # Package
 from plan.exceptions import PluginNameClashError
 from plan.exceptions import PluginNotFoundError
-from plan.report import Report
-from plan.abstract_channel import AbstractChannel
-from plan.abstract_stash import AbstractStash
 
 
 class PluginRegistry:
 
     PLUGINS = {}
-    __VALID_TYPES = (Report, AbstractStash, AbstractChannel)
+    __VALID_TYPES = ('Report', 'AbstractStash', 'AbstractChannel')
 
     @classmethod
     def register(cls, other):
-        mro = inspect.getmro(other)
+        mro = [x.__name__ for x in inspect.getmro(other)]
 
         # Ensure that the registered class is of a valid type.
         if not any(x in mro for x in cls.__VALID_TYPES):
