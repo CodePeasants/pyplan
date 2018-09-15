@@ -1,3 +1,5 @@
+# Notice: This project is currently a work in progress and does not yet have a working release
+
 # pyplan
 Python framework for planning and managing human events. Good for events with any degree of complexity from
 get-togethers to sports/game tournaments.
